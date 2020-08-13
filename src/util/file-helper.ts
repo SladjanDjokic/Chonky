@@ -5,6 +5,11 @@ import { Nullable } from 'tsdef';
 import { FileData } from '../types/files.types';
 
 export class FileHelper {
+    public static isEncrypted(file: Nullable<FileData>): file is FileData {
+        // Not a directory by default
+        return !!file && file.isAmeraEncrypted === true;
+    }
+
     public static isDirectory(file: Nullable<FileData>): file is FileData {
         // Not a directory by default
         return !!file && file.isDir === true;

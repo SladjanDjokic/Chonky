@@ -8,8 +8,10 @@
 # Nwb
 /demo/dist
 /es
-/lib
 /umd
+/docs
+/stories
+.storybook
 
 # Dependencies
 /node_modules
