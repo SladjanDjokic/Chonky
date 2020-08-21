@@ -146,6 +146,12 @@ export default class FileListEntry extends React.PureComponent<
           </span>
           &nbsp;&nbsp;
         </When>
+        <When condition={file.isAmeraEncrypted === true}>
+          <span className="chonky-text-subtle">
+            <Icon icon={icons.lock} size="xs" />
+          </span>
+          &nbsp;&nbsp;
+        </When>
         <When condition={file.isHidden === true}>
           <span className="chonky-text-subtle">
             <Icon icon={icons.hidden} size="xs" />

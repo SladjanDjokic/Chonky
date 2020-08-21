@@ -18,6 +18,7 @@ import {
   Selection,
   SortOrder,
   SortProperty,
+  // SingleFileActionHandler,
 } from '../typedef';
 import Dropdown from './Dropdown';
 import IconButton from './IconButton';
@@ -42,6 +43,8 @@ interface ControlsProps {
   onFolderCreate?: Nullable<() => void>;
   onUploadClick?: Nullable<() => void>;
   onDownloadFiles?: Nullable<MultiFileActionHandler>;
+  onViewDetails?: Nullable<() => void>;
+  onShare?: Nullable<() => void>;
   onDeleteFiles?: Nullable<MultiFileActionHandler>;
 
   getFilesFromSelection: () => FileData[];
@@ -64,10 +67,10 @@ const SortButtons = [
 ];
 
 const DropdownButtons = [
-  [Option.ShowHidden, 'Show hidden files'],
+  // [Option.ShowHidden, 'Show hidden files'],
   [Option.FoldersFirst, 'Show folders first'],
   [Option.ShowRelativeDates, 'Show relative dates'],
-  [Option.DisableTextSelection, 'Disable text selection'],
+  // [Option.DisableTextSelection, 'Disable text selection'],
 ];
 
 export default class Controls extends React.PureComponent<
@@ -139,6 +142,8 @@ export default class Controls extends React.PureComponent<
       onFolderCreate,
       onUploadClick,
       onDownloadFiles,
+      onViewDetails,
+      onShare,
       onDeleteFiles,
       getFilesFromSelection,
     } = this.props;
@@ -153,6 +158,8 @@ export default class Controls extends React.PureComponent<
       [icons.folderCreate, 'Create folder', onFolderCreate, false],
       [icons.upload, 'Upload files', onUploadClick, false],
       [icons.download, 'Download files', onDownloadFiles, true],
+      [icons.info, 'View details', onViewDetails, true],
+      [icons.symlink, 'Share', onShare, true],
       [icons.trash, 'Delete files', onDeleteFiles, true],
     ];
     const buttons = new Array(buttonData.length);

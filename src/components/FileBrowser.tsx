@@ -106,6 +106,8 @@ export interface FileBrowserProps {
   onMoveFiles?: MultiFileActionHandler;
   onDownloadFiles?: Nullable<MultiFileActionHandler>;
   onDeleteFiles?: Nullable<MultiFileActionHandler>;
+  onViewDetails?: Nullable<() => void>;
+  onShare?: Nullable<() => void>;
 
   /**
    * The function that is called whenever a file entry in the main `FileBrowser` container is clicked once. If it
@@ -212,6 +214,8 @@ export default class FileBrowser extends React.Component<
     onFolderCreate: undefined,
     onUploadClick: undefined,
     onDownloadFiles: undefined,
+    onViewDetails: undefined,
+    onShare: undefined,
     onDeleteFiles: undefined,
     doubleClickDelay: 300,
     disableSelection: false,
@@ -324,7 +328,7 @@ export default class FileBrowser extends React.Component<
     }
     if (!isNil(view) && view !== old.view) this.setState({ view });
     if (isObject(options) && options !== old.options) {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         options: { ...prevState.options, ...options },
       }));
     }
@@ -340,7 +344,7 @@ export default class FileBrowser extends React.Component<
         return { selection, previousSelectionIndex: undefined };
       });
     } else if (selectionStatus === SelectionStatus.NeedsCleaning) {
-      this.setState(prevState => {
+      this.setState((prevState) => {
         const {
           rawFiles: files,
           selection: oldSelection,
@@ -352,7 +356,7 @@ export default class FileBrowser extends React.Component<
           previousSelectionIndex = isNumber(prevIndex)
             ? clampIndex(prevIndex, files)
             : undefined;
-          files.map(file => {
+          files.map((file) => {
             if (!isObject(file)) return;
             const wasSelected = oldSelection[file.id] === true;
             const canBeSelected = file.selectable !== false;
@@ -427,14 +431,14 @@ export default class FileBrowser extends React.Component<
   }
 
   protected setView = (view: FileView) => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       if (prevState.view !== view) return { view };
       return null;
     });
   };
 
   protected setOption = (name: Option, value: boolean) => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       const { options } = prevState;
       if (options[name] !== value)
         return { options: { ...options, [name]: value } };
@@ -443,7 +447,7 @@ export default class FileBrowser extends React.Component<
   };
 
   protected activateSortProperty = (name: SortProperty) => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       if (prevState.sortProperty !== name) {
         return { sortProperty: name, sortOrder: SortOrder.Asc };
       } else {
@@ -467,7 +471,7 @@ export default class FileBrowser extends React.Component<
     if (disableSelection === true) return;
 
     if (type === SelectionType.All) {
-      this.setState(prevState => {
+      this.setState((prevState) => {
         const { sortedFiles, selection: oldSelection } = prevState;
         const count = Object.keys(oldSelection).length;
         if (count === sortedFiles.length) return { selection: {} };
@@ -479,7 +483,7 @@ export default class FileBrowser extends React.Component<
       });
       return;
     } else if (type === SelectionType.None) {
-      this.setState(prevState => {
+      this.setState((prevState) => {
         const { selection: oldSelection } = prevState;
         const count = Object.keys(oldSelection).length;
         if (count === 0) return null;
@@ -495,7 +499,7 @@ export default class FileBrowser extends React.Component<
       return;
     }
 
-    this.setState(prevState => {
+    this.setState((prevState) => {
       const {
         sortedFiles,
         selection: oldSelection,
@@ -578,7 +582,7 @@ export default class FileBrowser extends React.Component<
    * @public
    */
   public setSelection(selection: Selection) {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       const { sortedFiles, fileIndexMap } = prevState;
       const newSelection = {};
       for (const id in selection) {
@@ -740,7 +744,7 @@ export default class FileBrowser extends React.Component<
         }
         if (isFunction(onOpenFiles)) {
           const openableFiles = selectedFilesSnapshot.filter(
-            f => f.openable !== false
+            (f) => f.openable !== false
           );
           if (openableFiles.length > 0) {
             promise = promise
@@ -765,6 +769,8 @@ export default class FileBrowser extends React.Component<
       onUploadClick,
       onDownloadFiles,
       onDeleteFiles,
+      onShare,
+      onViewDetails,
       thumbnailGenerator,
       fillParentContainer,
       Icon = DefaultIcon,
@@ -798,6 +804,8 @@ export default class FileBrowser extends React.Component<
             onUploadClick={onUploadClick}
             onDownloadFiles={onDownloadFiles}
             onDeleteFiles={onDeleteFiles}
+            onShare={onShare}
+            onViewDetails={onViewDetails}
             getFilesFromSelection={this.getFilesFromSelection}
             view={view}
             setView={this.setView}

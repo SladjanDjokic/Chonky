@@ -25,6 +25,8 @@ export interface FileData {
   isDir?: boolean; // Is a directory, default: false
   isHidden?: boolean; // Is a hidden file, default: false
   isSymlink?: boolean; // Is a symlink, default: false
+  isAmeraEncrypted?: boolean;
+  isShared?: boolean; // Is a shared file, default: false
   openable?: boolean; // Can be opened, default: true
   selectable?: boolean; // Can be selected, default: true
 
